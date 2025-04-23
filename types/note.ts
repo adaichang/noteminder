@@ -11,6 +11,15 @@ export interface Timer {
   active: boolean
 }
 
+export interface Attachment {
+  id: string
+  type: "file" | "link"
+  name: string
+  url: string
+  size?: number
+  fileType?: string
+}
+
 export interface Note {
   id: string
   title: string
@@ -20,6 +29,7 @@ export interface Note {
   videoUrl?: string
   reminder?: Date | string
   timer?: Timer
+  attachments: Attachment[]
   createdAt: string
   updatedAt: string
 }

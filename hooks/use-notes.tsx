@@ -91,6 +91,7 @@ export function NotesProvider({ children }: { children: ReactNode }) {
       videoUrl: note?.videoUrl || "",
       timer: note?.timer,
       reminder: note?.reminder,
+      attachments: note?.attachments || [],
       createdAt: note?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }

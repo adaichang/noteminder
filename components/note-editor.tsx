@@ -16,6 +16,7 @@ import { useNotes } from "@/hooks/use-notes"
 import { TimerSettings } from "@/components/timer-settings"
 import { VideoEmbed } from "@/components/video-embed"
 import { CalendarIntegration } from "@/components/calendar-integration"
+import { AttachmentManager, type Attachment } from "@/components/attachment-manager"
 import type { Note, TodoItem, Timer } from "@/types/note"
 import { cn } from "@/lib/utils"
 
@@ -40,6 +41,7 @@ export function NoteEditor({ note, onClose }: NoteEditorProps) {
   const [reminder, setReminder] = useState<Date | undefined>(note?.reminder ? new Date(note.reminder) : undefined)
   const [videoPreviewVisible, setVideoPreviewVisible] = useState(!!videoUrl)
   const [showCalendarIntegration, setShowCalendarIntegration] = useState(false)
+  const [attachments, setAttachments] = useState<Attachment[]>(note?.attachments || [])
 
   // Auto-focus the title input when opening the editor
   useEffect(() => {
@@ -85,6 +87,7 @@ export function NoteEditor({ note, onClose }: NoteEditorProps) {
       videoUrl,
       timer,
       reminder,
+      attachments,
       createdAt: note?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }
@@ -127,7 +130,7 @@ export function NoteEditor({ note, onClose }: NoteEditorProps) {
         <div>
           <label className="text-sm font-medium mb-1 block">Video URL</label>
           <Input
-            placeholder="Paste YouTube or Vimeo URL"
+            placeholder="Paste YouTube, YouTube Playlist, Vimeo, or Instagram Reel URL"
             value={videoUrl}
             onChange={(e) => handleVideoUrlChange(e.target.value)}
           />
@@ -136,6 +139,11 @@ export function NoteEditor({ note, onClose }: NoteEditorProps) {
               <VideoEmbed url={videoUrl} showThumbnail={true} />
             </div>
           )}
+        </div>
+
+        <div>
+          <label className="text-sm font-medium mb-1 block">Attachments</label>
+          <AttachmentManager attachments={attachments} onChange={setAttachments} />
         </div>
 
         <TimerSettings timer={timer} onChange={setTimer} />

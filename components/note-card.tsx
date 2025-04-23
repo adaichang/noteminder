@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { format } from "date-fns"
-import { Calendar, Clock, Edit, MoreVertical, Trash, Video, Timer } from "lucide-react"
+import { Calendar, Clock, Edit, MoreVertical, Trash, Video, Timer, Paperclip } from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -16,6 +16,7 @@ import { NoteEditor } from "@/components/note-editor"
 import { VideoEmbed } from "@/components/video-embed"
 import { TimerPlayer } from "@/components/timer-player"
 import { CalendarIntegration } from "@/components/calendar-integration"
+import { AttachmentList } from "@/components/attachment-list"
 
 interface NoteCardProps {
   note: Note
@@ -39,8 +40,9 @@ export function NoteCard({ note }: NoteCardProps) {
     const isButton = target.closest("button")
     const isTimerPlayer = target.closest(".timer-player")
     const isVideoPlayer = target.closest(".video-player")
+    const isAttachment = target.closest("a")
 
-    if (!isCheckbox && !isButton && !isTimerPlayer && !isVideoPlayer) {
+    if (!isCheckbox && !isButton && !isTimerPlayer && !isVideoPlayer && !isAttachment) {
       setIsEditing(true)
     }
   }
@@ -114,6 +116,12 @@ export function NoteCard({ note }: NoteCardProps) {
           </div>
         )}
 
+        {note.attachments?.length > 0 && (
+          <div className="mb-3">
+            <AttachmentList attachments={note.attachments} compact={true} />
+          </div>
+        )}
+
         {note.timer && note.timer.active && (
           <div className="mb-3">
             <div
@@ -181,6 +189,12 @@ export function NoteCard({ note }: NoteCardProps) {
             <div className="flex items-center">
               <Video className="mr-1 h-3 w-3" />
               Video
+            </div>
+          )}
+          {note.attachments?.length > 0 && (
+            <div className="flex items-center">
+              <Paperclip className="mr-1 h-3 w-3" />
+              {note.attachments.length} {note.attachments.length === 1 ? "attachment" : "attachments"}
             </div>
           )}
           {note.timer?.active && (
